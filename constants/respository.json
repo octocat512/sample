@@ -1,0 +1,1517 @@
+[
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_siloVerifier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_factory",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_tokensFactory",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_defaultMaxLTV",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_defaultLiquidationThreshold",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "_bridgeAssets",
+            "type": "address[]"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "bridgeSilo",
+            "type": "address"
+          }
+        ],
+        "name": "BridgeSiloExists",
+        "type": "error"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newBridgeAsset",
+            "type": "address"
+          }
+        ],
+        "name": "BridgeAssetAdded",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "bridgeAssetRemoved",
+            "type": "address"
+          }
+        ],
+        "name": "BridgeAssetRemoved",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "oldPool",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newPool",
+            "type": "address"
+          }
+        ],
+        "name": "BridgePoolUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newMaxDeposits",
+            "type": "uint256"
+          }
+        ],
+        "name": "DefaultSiloMaxDepositsLimitUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "oldEntryFee",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newEntryFee",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "oldProtocolShareFee",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newProtocolShareFee",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "oldProtocolLiquidationFee",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newProtocolLiquidationFee",
+            "type": "uint256"
+          }
+        ],
+        "name": "FeeUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "newGuardedLaunchState",
+            "type": "bool"
+          }
+        ],
+        "name": "GuardedLaunchToggled",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "oldModel",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newModel",
+            "type": "address"
+          }
+        ],
+        "name": "InterestRateModel",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "newLimitedMaxLiquidityState",
+            "type": "bool"
+          }
+        ],
+        "name": "LimitedMaxLiquidityToggled",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "silo",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "asset",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "siloVersion",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address[]",
+            "name": "bridgeAssets",
+            "type": "address[]"
+          }
+        ],
+        "name": "NewSilo",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "oldOracle",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newOracle",
+            "type": "address"
+          }
+        ],
+        "name": "OracleUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipPending",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "newPermissionedSiloCreationState",
+            "type": "bool"
+          }
+        ],
+        "name": "PermissionedSiloCreationToggled",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "factory",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "siloLatestVersion",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "siloDefaultVersion",
+            "type": "uint256"
+          }
+        ],
+        "name": "RegisterSiloVersion",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "oldRouter",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newRouter",
+            "type": "address"
+          }
+        ],
+        "name": "RouterUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "siloDefaultVersion",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "defaultVersion",
+            "type": "uint256"
+          }
+        ],
+        "name": "SiloDefaultVersion",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "silo",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "asset",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "newMaxDeposits",
+            "type": "uint256"
+          }
+        ],
+        "name": "SiloMaxDepositsLimitsUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "verifier",
+            "type": "address"
+          }
+        ],
+        "name": "SiloVerifier",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "oldTokensFactory",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newTokensFactory",
+            "type": "address"
+          }
+        ],
+        "name": "TokensFactoryUpdate",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "factory",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "siloVersion",
+            "type": "uint256"
+          }
+        ],
+        "name": "UnregisterSiloVersion",
+        "type": "event"
+      },
+      {
+        "inputs": [],
+        "name": "ETH_PREFIX",
+        "outputs": [
+          {
+            "internalType": "bytes",
+            "name": "",
+            "type": "bytes"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "INFINITY",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "acceptOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_newBridgeAsset",
+            "type": "address"
+          }
+        ],
+        "name": "addBridgeAsset",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "assetConfigs",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "maxLoanToValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationThreshold",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "interestRateModel",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "bridgeAssets",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "bridgeAssetsIndex",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "defaultAssetConfig",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "maxLoanToValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidationThreshold",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "interestRateModel",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "defaultSiloMaxDepositsLimit",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "entryFee",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getBridgeAssets",
+        "outputs": [
+          {
+            "internalType": "address[]",
+            "name": "",
+            "type": "address[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          }
+        ],
+        "name": "getInterestRateModel",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          }
+        ],
+        "name": "getLiquidationThreshold",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          }
+        ],
+        "name": "getMaxSiloDeposits",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          }
+        ],
+        "name": "getMaximumLTV",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getRemovedBridgeAssets",
+        "outputs": [
+          {
+            "internalType": "address[]",
+            "name": "",
+            "type": "address[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "guardedLaunch",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          }
+        ],
+        "name": "isSilo",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "limitedMaxLiquidity",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_siloAsset",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_siloVersion",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_siloData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "_oracle",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_oracleData",
+            "type": "bytes"
+          }
+        ],
+        "name": "newSilo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint8",
+            "name": "_v",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_r",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_s",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "_siloAsset",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_siloVersion",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_siloData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "_oracle",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_oracleData",
+            "type": "bytes"
+          }
+        ],
+        "name": "newSiloVerified",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "oracle",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "pendingOwner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "permissionedSiloCreation",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "protocolLiquidationFee",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "protocolShareFee",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_quote",
+            "type": "address"
+          },
+          {
+            "internalType": "uint8",
+            "name": "_v",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_r",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_s",
+            "type": "bytes32"
+          }
+        ],
+        "name": "recoverSigner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "contract IFactory",
+            "name": "_factory",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "_isDefault",
+            "type": "bool"
+          }
+        ],
+        "name": "registerSiloVersion",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_bridgeAssetToRemove",
+            "type": "address"
+          }
+        ],
+        "name": "removeBridgeAsset",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "removedBridgeAssets",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "removedBridgeAssetsIndexes",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_siloAsset",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_siloVersion",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_siloData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "address",
+            "name": "_oracle",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_oracleData",
+            "type": "bytes"
+          }
+        ],
+        "name": "replaceSilo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "router",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_maxLoanToValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_liquidationThreshold",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "_interestRateModel",
+            "type": "address"
+          }
+        ],
+        "name": "setAssetConfig",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_defaultInterestRateModel",
+            "type": "address"
+          }
+        ],
+        "name": "setDefaultInterestRateModel",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_defaultLiquidationThreshold",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDefaultLiquidationThreshold",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_defaultMaxLTV",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDefaultMaximumLTV",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_maxDeposits",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDefaultSiloMaxDepositsLimit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_defaultVersion",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDefaultSiloVersion",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_entryFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_protocolShareFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_protocolLiquidationFee",
+            "type": "uint256"
+          }
+        ],
+        "name": "setFees",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_oracle",
+            "type": "address"
+          }
+        ],
+        "name": "setOracle",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_router",
+            "type": "address"
+          }
+        ],
+        "name": "setRouter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_silo",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_maxDeposits",
+            "type": "uint256"
+          }
+        ],
+        "name": "setSiloMaxDepositsLimit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_tokensFactory",
+            "type": "address"
+          }
+        ],
+        "name": "setTokensFactory",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_verifier",
+            "type": "address"
+          }
+        ],
+        "name": "setVerifier",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "silo",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "siloDefaultVersion",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "siloFactory",
+        "outputs": [
+          {
+            "internalType": "contract IFactory",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "siloLatestVersion",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "siloMaxDepositsLimits",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_asset",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_quote",
+            "type": "address"
+          },
+          {
+            "internalType": "uint8",
+            "name": "_v",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_r",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "_s",
+            "type": "bytes32"
+          }
+        ],
+        "name": "siloOffChainVerification",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "siloReverse",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "siloVerifier",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "toggleGuardedLaunch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "toggleLimitedMaxLiquidity",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "togglePermissionedSiloCreation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "tokensFactory",
+        "outputs": [
+          {
+            "internalType": "contract ITokensFactory",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newPendingOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferPendingOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_siloVersion",
+            "type": "uint256"
+          }
+        ],
+        "name": "unregisterSiloVersion",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ]
