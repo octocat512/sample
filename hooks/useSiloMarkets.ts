@@ -1,14 +1,15 @@
-import { GraphQLClient } from 'graphql-request';
-
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.23.k';
+import { GraphQLClient } from "graphql-request";
+import { useQuery } from "react-query";
+export const GRAPH_ENDPOINT =
+  "https://api.studio.thegraph.com/query/9379/silo/0.23.k";
 
 const GRAPHQL_CLEINT_HEADERS = {
-    'Access-Control-Allow-Origin': 'https://thegraph.com',
-  };
-  
-  export const MARKET_QUERY_KEY = 'siloMarketData';
-  
-  const siloMarketsQuery = `
+  "Access-Control-Allow-Origin": "https://thegraph.com",
+};
+
+export const MARKET_QUERY_KEY = "siloMarketData";
+
+const siloMarketsQuery = `
   {
     silos {
       id
@@ -20,17 +21,18 @@ const GRAPHQL_CLEINT_HEADERS = {
   }
   `;
 
+export const fetchSiloData = async () => {
+  const client = new GraphQLClient(GRAPH_ENDPOINT);
+  client.setHeaders(GRAPHQL_CLEINT_HEADERS);
+  return await client.request(siloMarketsQuery);
+};
 
-  export const fetchSiloData = async() => {
-    const client = new GraphQLClient(GRAPH_ENDPOINT);
-    client.setHeaders(GRAPHQL_CLEINT_HEADERS);
-    return await client.request(siloMarketsQuery);
-  }
+const useSiloMarkets = () => {
+  // implement this with react query
+  return useQuery("SiloMarkets", async () => {
+    const data = await fetchSiloData();
+    return data["silos"];
+  });
+};
 
-
-  const useSiloMarkets = () => {
-    // implement this with react query
-  }
-  
-  export default useSiloMarkets;
-  
+export default useSiloMarkets;

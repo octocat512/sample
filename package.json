@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^6.2.1",
+    "@types/styled-components": "^5.1.24",
     "ethers": "^5.5.4",
     "graphql": "^16.3.0",
     "graphql-request": "^4.0.0",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-query": "^3.34.16"
+    "react-feather": "^2.0.9",
+    "react-query": "^3.34.16",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@types/node": "17.0.21",
